@@ -313,6 +313,11 @@ class Broker
         ['httpCode' => $httpCode, 'contentType' => $contentType, 'body' => $body] =
             $this->getCurl()->request($method, $url, $headers, $method === 'POST' ? $data : '');
 
+        // When the code is 204 curl doesn't get content-type
+        if ($httpCode == 204 && empty($contentType)) {
+            $contentType = '';
+        }
+
         return $this->handleResponse($httpCode, $contentType, $body);
     }
 
